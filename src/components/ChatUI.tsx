@@ -13,9 +13,9 @@ type BrowserSpeechRecognition = {
   interimResults: boolean;
   start: () => void;
   stop: () => void;
-  onresult: ((event: any) => void) | null;
-  onerror: ((event: any) => void) | null;
-  onend: ((event: any) => void) | null;
+  onresult: ((event: unknown) => void) | null;
+  onerror: ((event: unknown) => void) | null;
+  onend: ((event: unknown) => void) | null;
 };
 
 const quickPrompts = [
@@ -60,7 +60,7 @@ export default function ChatUI() {
 
   const recognition = useMemo<BrowserSpeechRecognition | null>(() => {
     if (!mounted) return null;
-    const w = window as any;
+    const w = window as unknown as { SpeechRecognition?: new () => BrowserSpeechRecognition; webkitSpeechRecognition?: new () => BrowserSpeechRecognition };
     const SR = w?.SpeechRecognition || w?.webkitSpeechRecognition;
     if (!SR) return null;
     const rec = new SR();
@@ -108,16 +108,16 @@ export default function ChatUI() {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ messages: messages.concat({ id: "tmp", role: "user", content: prompt }) }),
       });
-      const data = await res.json();
+      const data: { reply?: string; provider?: "local" | "groq" | "error" } = await res.json();
       const reply = data?.reply ?? "I couldn't find that.";
-      setProvider((data?.provider as any) ?? null);
+      setProvider(data?.provider ?? null);
       if (data?.provider === "error") {
         // Show a subtle hint in UI by appending a note
         push("assistant", "(AI error — using chibi voice only)");
       }
       push("assistant", reply);
       speak(reply);
-    } catch (e) {
+    } catch (_e) {
       push("assistant", "Sorry, something went wrong.");
     } finally {
       setIsSending(false);
@@ -132,8 +132,9 @@ export default function ChatUI() {
     } else {
       setIsListening(true);
       recognition.start();
-      recognition.onresult = (ev: any) => {
-        const transcript = ev.results?.[0]?.[0]?.transcript ?? "";
+      recognition.onresult = (ev: unknown) => {
+        const res = ev as { results?: Array<Array<{ transcript?: string }>> };
+        const transcript = res.results?.[0]?.[0]?.transcript ?? "";
         setInput(transcript);
         setIsListening(false);
       };

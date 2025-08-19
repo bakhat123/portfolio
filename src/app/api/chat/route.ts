@@ -106,7 +106,8 @@ export async function POST(request: Request) {
           "mixtral-8x7b-32768"
         ];
 
-        let lastError: any = null;
+        type GroqLastError = { status: number; body: string; model: string; parseError?: string } | null;
+        let lastError: GroqLastError = null;
         for (const model of candidates) {
           const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
             method: "POST",
@@ -142,7 +143,7 @@ export async function POST(request: Request) {
           { reply: `AI provider error. Tried ${candidates.length} models. Last error: ${JSON.stringify(lastError).slice(0, 500)}…`, provider: "error" },
           { status: 502 }
         );
-      } catch (e) {
+      } catch (_e) {
         // Do not fall back to predefined answers when a key is present; surface an error so the user can fix it
         return NextResponse.json(
           { reply: "I couldn't reach the AI provider. Please verify GROQ_API_KEY and network connectivity.", provider: "error" },
@@ -153,7 +154,7 @@ export async function POST(request: Request) {
 
     const answer = answerFromProfile(question);
     return NextResponse.json({ reply: answer, provider: "local" });
-  } catch (err) {
+  } catch (_err) {
     return NextResponse.json({ reply: "Sorry, I couldn't process that.", provider: "local" }, { status: 200 });
   }
 }
