@@ -1,0 +1,32 @@
+{
+  "name": "Muhammad Bakhat Nasar",
+  "tagline": "CS student at SEECS, Batch 2023",
+  "bio": "CS student at SEECS, Batch 2023. Interested in AI, Blockchain, and Full-stack Dev.",
+  "skills": ["React", "Next.js", "MongoDB", "Payload CMS", "Python"],
+  "projects": [
+    {
+      "title": "Network Vulnerability Analyzer",
+      "desc": "Built a system to analyze and detect vulnerabilities across networks and hosts.",
+      "role": "Lead developer",
+      "stack": ["Python", "Nmap", "Flask"],
+      "link": ""
+    },
+    {
+      "title": "Blockchain EDR",
+      "desc": "Research on endpoint detection and response using a private blockchain for tamper-evident logging.",
+      "role": "Researcher",
+      "stack": ["Blockchain", "Go", "Security"],
+      "link": ""
+    }
+  ],
+  "experience": [],
+  "goals": ["AI research", "Blockchain engineering", "Cybersecurity", "Full-stack excellence"],
+  "hobbies": ["E-gaming", "Gym", "Tech Clubs"],
+  "contact": {
+    "email": "bakhatnasar246@gmail.com",
+    "github": "https://github.com/bakhat123",
+    "linkedin": "https://www.linkedin.com/in/muhammad-bakhat-nasar-a61ba3379/"
+  }
+}
+
+
